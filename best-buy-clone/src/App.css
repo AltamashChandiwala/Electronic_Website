@@ -1,0 +1,17 @@
+.bg-custom {
+  background-color: #0046be !important;
+}
+
+.bg-footer {
+  background-color: #e9edf5 !important;
+}
+
+.product-detail {
+  margin-top: 50px;
+}
+
+.social-icon {
+  font-size: 24px;
+  margin-right: 10px;
+  color: #333;
+}
