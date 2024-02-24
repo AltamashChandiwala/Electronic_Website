@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import { Link } from 'react-router-dom';
 
 const ProductDetailPage = () => {
   const { productId } = useParams();
@@ -65,6 +66,7 @@ const ProductDetailPage = () => {
               <p>{product.desc_2}</p>
               <p>{product.desc_3}</p>
               <p>{product.desc_4}</p>
+              <Link to="/ordersuccess" className="btn btn-primary">Buy Now</Link>
             </div>
           </div>
         </div>
