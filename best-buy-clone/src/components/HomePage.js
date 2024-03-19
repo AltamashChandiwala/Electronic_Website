@@ -49,6 +49,7 @@ const HomePage = () => {
             <img src="/images/watch.jpeg" className="card-img-top" alt="Watches" />
             <div className="card-body">
               <h5 className="card-title">Watches</h5>
+              <Link to="/watch" className="btn btn-primary">Shop Now</Link>
             </div>
           </div>
         </div>
