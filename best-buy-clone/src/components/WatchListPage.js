@@ -1,18 +1,36 @@
-// WatchListPage.js
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { database } from '../firebase'; // Import the database instance from firebase.js
 import Navbar from './Navbar';
 import Footer from './Footer';
+import { Link } from 'react-router-dom';
 
 const WatchListPage = () => {
   const [watches, setWatches] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('https://raw.githubusercontent.com/AltamashChandiwala/Mobile_data/main/electronic.json')
-      .then(response => response.json())
-      .then(data => setWatches(data))
-      .catch(error => console.error('Error fetching data:', error));
+    const watchesRef = database.ref('watches');
+    watchesRef.on('value', (snapshot) => {
+      const watchesData = snapshot.val();
+      if (watchesData) {
+        const watchesArray = Object.values(watchesData);
+        setWatches(watchesArray);
+        setLoading(false);
+      } else {
+        console.log('No watches found in the database');
+        setLoading(false);
+      }
+    }, (error) => {
+      console.error('Error fetching data:', error);
+      setLoading(false);
+    });
+
+    return () => watchesRef.off('value');
   }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>

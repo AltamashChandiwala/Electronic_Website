@@ -1,31 +1,43 @@
-// src/components/WatchDetailPage.js
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { Link } from 'react-router-dom';
+import { database } from '../firebase'; // Import Realtime Database from firebase.js
 
 const WatchDetailPage = () => {
   const { watchId } = useParams();
   const [watch, setWatch] = useState(null);
-  const [activeSlide, setActiveSlide] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [activeSlide, setActiveSlide] = useState(0); // Define activeSlide state
+  const handleSlideChange = (selectedIndex) => setActiveSlide(selectedIndex); // Define handleSlideChange function
 
   useEffect(() => {
-    fetch('https://raw.githubusercontent.com/AltamashChandiwala/Mobile_data/main/electronic.json')
-      .then(response => response.json())
-      .then(data => {
-        const selectedWatch = data.find(w => w.product_id === parseInt(watchId));
-        setWatch(selectedWatch);
-      })
-      .catch(error => console.error('Error fetching data:', error));
+    const getWatchDetails = () => {
+      const watchRef = database.ref('watches/' + watchId);
+      watchRef.once('value', (snapshot) => {
+        const watchData = snapshot.val();
+        if (watchData) {
+          setWatch(watchData);
+        } else {
+          console.log('No such watch!');
+        }
+        setLoading(false);
+      }, (error) => {
+        console.error('Error fetching watch details:', error);
+        setLoading(false);
+      });
+    };
+
+    getWatchDetails();
   }, [watchId]);
 
-  const handleSlideChange = (selectedIndex) => {
-    setActiveSlide(selectedIndex);
-  };
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   if (!watch) {
-    return <div>Loading...</div>;
+    return <div>No watch found!</div>;
   }
 
   return (

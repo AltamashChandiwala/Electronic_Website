@@ -1,32 +1,45 @@
-// src/components/ProductDetailPage.js
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { Link } from 'react-router-dom';
+import { database } from '../firebase'; // Import Realtime Database from firebase.js
 
 const ProductDetailPage = () => {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
-  const [activeSlide, setActiveSlide] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [activeSlide, setActiveSlide] = useState(0); // Define activeSlide state
+  const handleSlideChange = (selectedIndex) => setActiveSlide(selectedIndex); // Define handleSlideChange function
 
   useEffect(() => {
-    fetch('https://raw.githubusercontent.com/AltamashChandiwala/Mobile_data/main/mobile.json')
-      .then(response => response.json())
-      .then(data => {
-        const selectedProduct = data.find(p => p.product_id === parseInt(productId));
-        setProduct(selectedProduct);
-      })
-      .catch(error => console.error('Error fetching data:', error));
+    const getProductDetails = () => {
+      const productRef = database.ref('mobiles/' + productId);
+      productRef.once('value', (snapshot) => {
+        const productData = snapshot.val();
+        if (productData) {
+          setProduct(productData);
+        } else {
+          console.log('No such product!');
+        }
+        setLoading(false);
+      }, (error) => {
+        console.error('Error fetching product details:', error);
+        setLoading(false);
+      });
+    };
+
+    getProductDetails();
   }, [productId]);
 
-  const handleSlideChange = (selectedIndex) => {
-    setActiveSlide(selectedIndex);
-  };
-
-  if (!product) {
+  if (loading) {
     return <div>Loading...</div>;
   }
+
+  if (!product) {
+    return <div>No product found!</div>;
+  }
+
 
   return (
     <div>
