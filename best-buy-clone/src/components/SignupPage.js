@@ -46,6 +46,8 @@ const SignupPage = () => {
       const imageRef = storageRef.child(`profile-images/${user.uid}`);
       await imageRef.put(profileImage);
 
+      alert('Sign up successful! Please verify your email address.');
+
       // Redirect to login page after successful signup
       navigate('/login'); // Navigate to the login page
     } catch (error) {

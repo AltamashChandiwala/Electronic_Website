@@ -25,6 +25,7 @@ const LoginPage = () => {
     try {
       await auth.signInWithEmailAndPassword(email, password);
       console.log('Login successful');
+      alert('Login successful!');
       // Redirect to another page after successful login
       navigate('/');
     } catch (error) {

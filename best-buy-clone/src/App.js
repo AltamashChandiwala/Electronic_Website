@@ -11,8 +11,9 @@ import SignupPage from './components/SignupPage';
 import WatchListPage from './components/WatchListPage';
 import WatchDetailPage from './components/WatchDetailPage';
 import MyAccountPage from './components/MyAccountPage';
-import Navbar from './components/Navbar'; // Import Navbar component
-import Footer from './components/Footer'; // Import Footer component
+import AboutUsPage from './components/AboutUsPage';
+import PrivacyPolicyPage from './components/PrivacyPolicyPage';
+import TermsAndConditionsPage from './components/TermsAndConditionsPage'
 import { auth } from './firebase'; // Import auth from firebase.js
 
 function App() {
@@ -31,6 +32,9 @@ function App() {
         <Route path="/" element={<HomeContent />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/about" element={<AboutUsPage/>} />
+        <Route path="/policy" element={<PrivacyPolicyPage/>} />
+        <Route path="/terms" element={<TermsAndConditionsPage/>} />
         {isLoggedIn ? (
           <>
             <Route path="/products" element={<ProductPage />} />
