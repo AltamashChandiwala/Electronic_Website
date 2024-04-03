@@ -45,6 +45,14 @@ const SignupPage = () => {
       const storageRef = storage.ref();
       const imageRef = storageRef.child(`profile-images/${user.uid}`);
       await imageRef.put(profileImage);
+      
+      // Get the download URL of the uploaded image
+      const downloadURL = await imageRef.getDownloadURL();
+
+      // Store the image URL in the Realtime Database
+      await firestore.collection('users').doc(user.uid).update({
+        profileImage: downloadURL,
+      });
 
       alert('Sign up successful! Please verify your email address.');
 
@@ -55,6 +63,7 @@ const SignupPage = () => {
       console.error('Error signing up:', error.message);
     }
   };
+
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];

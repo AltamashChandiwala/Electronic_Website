@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { auth, firestore } from '../firebase.js'; // Import auth and firestore from firebase.js
+import { auth, firestore, storage } from '../firebase.js'; // Import auth and firestore from firebase.js
 import Navbar from './Navbar';
 import Footer from './Footer';
 import defaultProfileImage from '../assets/default.png'; // Import default profile image
