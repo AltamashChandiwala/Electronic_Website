@@ -72,6 +72,11 @@ const Navbar = () => {
                   <Link className="nav-link" to="/crud">Add Products</Link>
                 </li>
               )}
+              {isAdmin && (
+                <li className="nav-item">
+                <Link className="nav-link" to="/orders">Orders</Link>
+              </li>
+              )}
               <li className="nav-item">
                 <button className="btn btn-link nav-link" onClick={handleLogout}>Logout</button>
               </li>

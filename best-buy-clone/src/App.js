@@ -16,6 +16,7 @@ import PrivacyPolicyPage from './components/PrivacyPolicyPage';
 import TermsAndConditionsPage from './components/TermsAndConditionsPage';
 import ProductCRUD from './components/ProductCRUD';
 import { auth } from './firebase'; // Import auth from firebase.js
+import OrdersPage from './components/OrdersPage';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -47,7 +48,8 @@ function App() {
             <Route path="/watch/:watchId" element={<WatchDetailPage />} />
             <Route path="/myaccount" element={<MyAccountPage />} />
             {/* <Route path="/crud" element={<ProductCRUD />} /> */}
-            {isAdmin && <Route path="/crud" element={<ProductCRUD />} />} {/* Conditionally render CRUD routes */}
+            {isAdmin && <Route path="/crud" element={<ProductCRUD />}/>}
+            {isAdmin && <Route path="/orders" element={<OrdersPage/>} />} 
           </>
         ) : (
           <Route path="*" element={<Navigate to="/login" />} />

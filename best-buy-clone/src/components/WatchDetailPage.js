@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { Link } from 'react-router-dom';
-import { database } from '../firebase'; // Import Realtime Database from firebase.js
+import { database, auth } from '../firebase'; // Import Realtime Database from firebase.js
 
 const WatchDetailPage = () => {
   const { watchId } = useParams();
@@ -11,6 +11,21 @@ const WatchDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [activeSlide, setActiveSlide] = useState(0); // Define activeSlide state
   const handleSlideChange = (selectedIndex) => setActiveSlide(selectedIndex); // Define handleSlideChange function
+  const [user, setUser] = useState(null); // State to store user information
+
+  useEffect(() => {
+    // Fetch user information from Firebase Authentication
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user); // Set the user state if logged in
+      } else {
+        setUser(null); // Set user state to null if not logged in
+      }
+    });
+
+    return () => unsubscribe(); // Cleanup subscription
+
+  }, []);
 
   useEffect(() => {
     const getWatchDetails = () => {
@@ -39,6 +54,27 @@ const WatchDetailPage = () => {
   if (!watch) {
     return <div>No watch found!</div>;
   }
+  const handleBuyNow = () => {
+    // Check if user is logged in
+    if (user) {
+      // Save order information to the database
+      const orderRef = database.ref('orders').push(); // Create a new unique key for the order
+      orderRef.set({
+        userEmail: user.email, // Use user's email
+        productName: watch.product_name, // Add the product name
+        timestamp: new Date().toString(), // Add timestamp for order
+      }).then(() => {
+        console.log('Order saved successfully!');
+        // Redirect to order success page or show confirmation message
+        // For demonstration, let's navigate to the order success page
+      }).catch((error) => {
+        console.error('Error saving order:', error);
+      });
+    } else {
+      console.error('User not logged in!');
+      // Handles scenario where user is not logged in
+    }
+  };
 
   return (
     <div>
@@ -76,7 +112,7 @@ const WatchDetailPage = () => {
               <p>{watch.desc_2}</p>
               <p>{watch.desc_3}</p>
               <p>{watch.desc_4}</p>
-              <Link to="/ordersuccess" className="btn btn-primary">Buy Now</Link>
+              <Link to="/ordersuccess" className="btn btn-primary" onClick={handleBuyNow}>Buy Now</Link>
             </div>
           </div>
         </div>
