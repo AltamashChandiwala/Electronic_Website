@@ -18,3 +18,9 @@ export const auth = firebaseApp.auth();
 export const firestore = firebaseApp.firestore();
 export const storage = firebaseApp.storage();
 export const database = firebaseApp.database();
+
+// export const setAdminRole = (NPdqqQTM68f15sUcUdRlpIW75Ar1) => {
+//   return firestore.collection('users').doc(NPdqqQTM68f15sUcUdRlpIW75Ar1).update({
+//     isAdmin: true
+//   });
+//}
