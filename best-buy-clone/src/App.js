@@ -19,10 +19,12 @@ import { auth } from './firebase'; // Import auth from firebase.js
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setIsLoggedIn(!!user); // Update isLoggedIn based on user authentication status
+      setIsAdmin(!!user && user.email === 'altamashchandiwala@gmail.com'); // Check if the user is an admin
     });
     return () => unsubscribe();
   }, []);
@@ -44,7 +46,8 @@ function App() {
             <Route path="/watch" element={<WatchListPage />} />
             <Route path="/watch/:watchId" element={<WatchDetailPage />} />
             <Route path="/myaccount" element={<MyAccountPage />} />
-            <Route path="/crud" element={<ProductCRUD />} />
+            {/* <Route path="/crud" element={<ProductCRUD />} /> */}
+            {isAdmin && <Route path="/crud" element={<ProductCRUD />} />} {/* Conditionally render CRUD routes */}
           </>
         ) : (
           <Route path="*" element={<Navigate to="/login" />} />

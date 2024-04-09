@@ -5,6 +5,7 @@ import 'firebase/compat/auth';
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,9 +19,12 @@ const Navbar = () => {
           navigate('/login'); // Redirect to login page if email is not verified
         } else {
           setIsLoggedIn(true);
+          // Check if user is admin
+          setIsAdmin(user.email === 'altamashchandiwala@gmail.com');
         }
       } else {
         setIsLoggedIn(false);
+        setIsAdmin(false);
       }
     });
 
@@ -60,9 +64,14 @@ const Navbar = () => {
               <li className="nav-item">
                 <Link className="nav-link" to="/myaccount">My Account</Link>
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <Link className="nav-link" to="/crud">Add Products</Link>
-              </li>
+              </li> */}
+              {isAdmin && (
+                <li className="nav-item">
+                  <Link className="nav-link" to="/crud">Add Products</Link>
+                </li>
+              )}
               <li className="nav-item">
                 <button className="btn btn-link nav-link" onClick={handleLogout}>Logout</button>
               </li>
